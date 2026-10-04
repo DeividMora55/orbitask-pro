@@ -1,0 +1,18 @@
+{
+  "name": "Orbitask Pro - Aplicación Multiplataforma",
+  "short_name": "Orbitask Pro",
+  "description": "Aplicación multiplataforma de productividad con tareas, proyectos, notas y reportes.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090909",
+  "theme_color": "#c1121f",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

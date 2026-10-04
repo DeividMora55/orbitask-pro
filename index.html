@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#c1121f" />
+  <meta name="description" content="Orbitask Pro, aplicación multiplataforma de productividad personal." />
+  <title>Orbitask Pro | Aplicación Multiplataforma</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">O</div>
+        <div>
+          <h1>Orbitask Pro</h1>
+          <p>Productividad multiplataforma</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">Inicio</button>
+        <button class="nav-item" data-view="tasks">Tareas</button>
+        <button class="nav-item" data-view="projects">Proyectos</button>
+        <button class="nav-item" data-view="agenda">Agenda</button>
+        <button class="nav-item" data-view="notes">Notas</button>
+        <button class="nav-item" data-view="reports">Reportes</button>
+        <button class="nav-item" data-view="settings">Configuración</button>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button id="installBtn" class="secondary-btn hidden">Instalar app</button>
+        <button id="seedBtn" class="ghost-btn">Restaurar datos demo</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">APLICACIÓN MULTIPLATAFORMA</p>
+          <h2 id="pageTitle">Panel principal</h2>
+          <p class="subtitle" id="pageSubtitle"
+          >Administra tareas, proyectos, notas y seguimiento diario en un solo lugar.</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="exportCsvBtn" class="ghost-btn">Exportar CSV</button>
+          <button id="exportJsonBtn" class="ghost-btn">Respaldar JSON</button>
+          <button id="newProjectBtn" class="secondary-btn">+ Proyecto</button>
+          <button id="newTaskBtn" class="primary-btn">+ Tarea</button>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="view active">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">RESUMEN GENERAL</p>
+            <h3>Organiza pendientes, metas y notas desde cualquier dispositivo.</h3>
+            <p>
+              Orbitask Pro funciona como aplicación web progresiva. Puede ejecutarse en computadora,
+              tableta y móvil, con almacenamiento local, instalación opcional, modo offline y reportes visuales.
+            </p>
+          </div>
+          <div class="hero-box">
+            <span class="mini-label">Hoy</span>
+            <strong id="todayLabel"></strong>
+            <small id="heroTaskSummary">0 tareas pendientes</small>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span>Total tareas</span><strong id="statTotalTasks">0</strong><small>Registros creados</small></article>
+          <article class="stat-card"><span>Pendientes</span><strong id="statPendingTasks">0</strong><small>Por completar</small></article>
+          <article class="stat-card"><span>Completadas</span><strong id="statCompletedTasks">0</strong><small>Resueltas</small></article>
+          <article class="stat-card"><span>Progreso</span><strong id="statProgress">0%</strong><small>Avance global</small></article>
+          <article class="stat-card"><span>Proyectos</span><strong id="statProjects">0</strong><small>Activos</small></article>
+          <article class="stat-card"><span>Alta prioridad</span><strong id="statHigh">0</strong><small>Atención inmediata</small></article>
+        </div>
+
+        <div class="grid two-col">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">PROGRESO</p>
+                <h3>Avance de tareas</h3>
+              </div>
+              <span class="chip" id="progressChip">0 de 0</span>
+            </div>
+            <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+            <div class="legend-row">
+              <span><i class="dot red"></i>Pendientes</span>
+              <span><i class="dot green"></i>Completadas</span>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">VENCIMIENTOS</p>
+                <h3>Próximas entregas</h3>
+              </div>
+            </div>
+            <div id="upcomingList" class="stack-list"></div>
+          </article>
+        </div>
+
+        <div class="grid two-col equal">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">ACTIVIDAD</p>
+                <h3>Tareas recientes</h3>
+              </div>
+            </div>
+            <div id="recentTasksList" class="stack-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">PROYECTOS</p>
+                <h3>Resumen por proyecto</h3>
+              </div>
+            </div>
+            <div id="dashboardProjects" class="stack-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tasksView" class="view">
+        <div class="toolbar four">
+          <input id="searchTaskInput" type="search" placeholder="Buscar tarea..." />
+          <select id="filterStatus">
+            <option value="all">Todos los estados</option>
+            <option value="pending">Pendientes</option>
+            <option value="completed">Completadas</option>
+          </select>
+          <select id="filterPriority">
+            <option value="all">Todas las prioridades</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Media</option>
+            <option value="Baja">Baja</option>
+          </select>
+          <select id="filterProject"><option value="all">Todos los proyectos</option></select>
+        </div>
+        <div id="taskList" class="card-list"></div>
+      </section>
+
+      <section id="projectsView" class="view">
+        <div class="section-header-inline">
+          <div>
+            <p class="eyebrow">ORGANIZACIÓN</p>
+            <h3>Gestión de proyectos</h3>
+          </div>
+          <span id="projectCount" class="chip">0 proyectos</span>
+        </div>
+        <div id="projectList" class="card-list"></div>
+      </section>
+
+      <section id="agendaView" class="view">
+        <div class="section-header-inline">
+          <div>
+            <p class="eyebrow">CALENDARIO</p>
+            <h3>Agenda por fecha</h3>
+          </div>
+          <span class="chip">Orden cronológico</span>
+        </div>
+        <div id="agendaList" class="agenda-list"></div>
+      </section>
+
+      <section id="notesView" class="view">
+        <div class="notes-layout">
+          <article class="panel sticky-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">NUEVA NOTA</p>
+                <h3>Guardar nota rápida</h3>
+              </div>
+            </div>
+            <input id="noteTitleInput" type="text" placeholder="Título de la nota" maxlength="80" />
+            <textarea id="noteContentInput" placeholder="Escribe aquí la nota..." maxlength="800"></textarea>
+            <button id="saveNoteBtn" class="primary-btn">Guardar nota</button>
+          </article>
+          <div>
+            <div class="section-header-inline">
+              <div>
+                <p class="eyebrow">NOTAS</p>
+                <h3>Notas almacenadas</h3>
+              </div>
+              <span id="noteCount" class="chip">0 notas</span>
+            </div>
+            <div id="noteList" class="card-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reportsView" class="view">
+        <div class="grid two-col">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">ANÁLISIS</p>
+                <h3>Distribución por prioridad</h3>
+              </div>
+            </div>
+            <canvas id="priorityChart" width="600" height="320"></canvas>
+          </article>
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">ANÁLISIS</p>
+                <h3>Estado de tareas</h3>
+              </div>
+            </div>
+            <canvas id="statusChart" width="600" height="320"></canvas>
+          </article>
+        </div>
+        <div class="grid two-col equal">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">PRODUCTIVIDAD</p>
+                <h3>Resumen textual</h3>
+              </div>
+            </div>
+            <div id="reportSummary" class="report-summary"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">PROYECTOS</p>
+                <h3>Comparativa</h3>
+              </div>
+            </div>
+            <canvas id="projectChart" width="600" height="320"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="grid two-col equal">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">RESPALDO</p><h3>Importar o exportar</h3></div></div>
+            <p class="text-block">Puedes exportar los datos en formato JSON para generar un respaldo, o importar un archivo previamente guardado con tareas, proyectos y notas.</p>
+            <div class="button-row">
+              <button id="settingsExportBtn" class="primary-btn">Exportar respaldo</button>
+              <label class="file-label">
+                Importar respaldo
+                <input id="importJsonInput" type="file" accept="application/json" hidden />
+              </label>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">PERSONALIZACIÓN</p><h3>Opciones del sistema</h3></div></div>
+            <div class="settings-list">
+              <div class="setting-item"><span>Modo visual</span><strong>Negro / rojo / blanco</strong></div>
+              <div class="setting-item"><span>Persistencia</span><strong>LocalStorage</strong></div>
+              <div class="setting-item"><span>Instalación</span><strong>PWA</strong></div>
+              <div class="setting-item"><span>Conectividad</span><strong>Funciona offline</strong></div>
+            </div>
+            <button id="clearDataBtn" class="danger-btn">Eliminar todos los datos</button>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="taskDialog">
+    <form id="taskForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">FORMULARIO</p>
+          <h3 id="taskDialogTitle">Nueva tarea</h3>
+        </div>
+        <button type="button" class="icon-btn" id="closeTaskDialogBtn">×</button>
+      </div>
+      <input id="taskIdInput" type="hidden" />
+      <label>Título<input id="taskTitleInput" required maxlength="100" placeholder="Ej. Finalizar reporte" /></label>
+      <div class="form-grid two">
+        <label>Proyecto<select id="taskProjectInput"></select></label>
+        <label>Categoría<select id="taskCategoryInput"><option>Escuela</option><option>Trabajo</option><option>Personal</option><option>Salud</option><option>Otro</option></select></label>
+      </div>
+      <div class="form-grid three">
+        <label>Prioridad<select id="taskPriorityInput"><option>Alta</option><option selected>Media</option><option>Baja</option></select></label>
+        <label>Estado<select id="taskStatusInput"><option value="pending">Pendiente</option><option value="completed">Completada</option></select></label>
+        <label>Fecha límite<input id="taskDateInput" type="date" required /></label>
+      </div>
+      <label>Descripción<textarea id="taskDescriptionInput" maxlength="500" placeholder="Describe la tarea..."></textarea></label>
+      <div class="dialog-actions">
+        <button type="button" class="ghost-btn" id="cancelTaskDialogBtn">Cancelar</button>
+        <button type="submit" class="primary-btn">Guardar tarea</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="projectDialog">
+    <form id="projectForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">FORMULARIO</p>
+          <h3 id="projectDialogTitle">Nuevo proyecto</h3>
+        </div>
+        <button type="button" class="icon-btn" id="closeProjectDialogBtn">×</button>
+      </div>
+      <input id="projectIdInput" type="hidden" />
+      <label>Nombre del proyecto<input id="projectNameInput" required maxlength="80" placeholder="Ej. Aplicación escolar" /></label>
+      <label>Descripción<textarea id="projectDescriptionInput" maxlength="400" placeholder="Describe el proyecto..."></textarea></label>
+      <div class="form-grid two">
+        <label>Responsable<input id="projectOwnerInput" maxlength="60" placeholder="Tu nombre" /></label>
+        <label>Fecha objetivo<input id="projectDeadlineInput" type="date" /></label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="ghost-btn" id="cancelProjectDialogBtn">Cancelar</button>
+        <button type="submit" class="primary-btn">Guardar proyecto</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
